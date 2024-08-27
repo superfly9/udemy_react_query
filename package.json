@@ -1,0 +1,33 @@
+{
+  "name": "udemy-react-query",
+  "version": "1.0.0",
+  "description": "Code to support the Udemy course [React Query: Server State Management in React](https://www.udemy.com/course/learn-react-query/?couponCode=REACT-QUERY-GITHUB)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": "true",
+  "workspaces": [
+    "base-blog-em"
+  ],
+  "dependencies": {
+    "@tanstack/react-query": "^5.8.3",
+    "@tanstack/react-query-devtools": "^5.8.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.8.3",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "vite": "^4.4.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
