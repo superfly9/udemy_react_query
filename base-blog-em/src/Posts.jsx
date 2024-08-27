@@ -1,15 +1,24 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { fetchPosts, deletePost, updatePost } from "./api";
 import { PostDetail } from "./PostDetail";
 const maxPostPage = 10;
+const minPostPage = 1;
 
 export function Posts() {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
 
   // replace with useQuery
-  const data = [];
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["post", currentPage],
+    queryFn: () => fetchPosts(currentPage),
+  });
+
+  if (isLoading) {
+    return <>Loading...</>;
+  }
 
   return (
     <>
@@ -25,11 +34,17 @@ export function Posts() {
         ))}
       </ul>
       <div className="pages">
-        <button disabled onClick={() => {}}>
+        <button
+          disabled={currentPage < minPostPage}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+        >
           Previous page
         </button>
         <span>Page {currentPage + 1}</span>
-        <button disabled onClick={() => {}}>
+        <button
+          disabled={currentPage > maxPostPage}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+        >
           Next page
         </button>
       </div>
