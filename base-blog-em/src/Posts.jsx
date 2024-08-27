@@ -11,17 +11,13 @@ export function Posts() {
   const [selectedPost, setSelectedPost] = useState(null);
 
   // replace with useQuery
-  const { data, isLoading, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["post", currentPage],
     queryFn: () => fetchPosts(currentPage),
   });
 
   if (isLoading) {
     return <>Loading...</>;
-  }
-
-  if (isFetching) {
-    return <>Fetching...</>;
   }
 
   return (
