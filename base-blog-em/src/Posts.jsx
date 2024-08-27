@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { fetchPosts, deletePost, updatePost } from "./api";
+import { fetchPosts } from "./api";
 import { PostDetail } from "./PostDetail";
 const maxPostPage = 10;
 const minPostPage = 1;

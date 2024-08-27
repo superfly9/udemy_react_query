@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchComments, updatePost } from "./api";
+import { deletePost, fetchComments, updatePost } from "./api";
 import "./PostDetail.css";
 
 export function PostDetail({ post }) {
@@ -8,13 +8,22 @@ export function PostDetail({ post }) {
     queryFn: () => fetchComments(post.id),
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: deletePost,
+  });
+
+  if (deleteMutation.isSuccess) {
+    // variables:  mutateFn애 넘겨진 데이터, submittedAt, isPending ,isSuccess, data
+    console.log("[deleteMutation]:", deleteMutation);
+  }
+
   const {
     data: mutateData,
     mutate,
     isSuccess,
     submittedAt,
   } = useMutation({
-    mutationFn: (postId) => updatePost(postId),
+    mutationFn: updatePost,
   });
 
   if (isSuccess) {
@@ -33,7 +42,7 @@ export function PostDetail({ post }) {
   return (
     <>
       <h3 style={{ color: "blue" }}>{post.title}</h3>
-      <button>Delete</button>{" "}
+      <button onClick={() => deleteMutation.mutate(post.id)}>Delete</button>
       <button
         onClick={() =>
           mutate(post.id, {
