@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 import { fetchPosts } from "./api";
 import { PostDetail } from "./PostDetail";
@@ -15,6 +15,15 @@ export function Posts() {
     queryKey: ["post", currentPage],
     queryFn: () => fetchPosts(currentPage),
   });
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.prefetchQuery({
+      queryKey: ["post", currentPage],
+      queryFn: () => fetchPosts(currentPage),
+    });
+  }, [currentPage, queryClient]);
 
   if (isLoading) {
     return <>Loading...</>;
