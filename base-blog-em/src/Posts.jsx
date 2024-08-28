@@ -50,6 +50,9 @@ export function Posts() {
             key={post.id}
             className="post-title"
             onClick={() => {
+              // PostDetail에서 deleteMutation,updateMutation을 둘 다 참조하고 있기에
+              // 한 번이라도 mutation이 실행되었다면 해당 mutation의 상태값이 여전히 유지되고 있음
+              // 이는 PostDetail에 영향을 미치고 있으므로 다른 Mutation의 이전 상태값에 간섭을 안 받으려면 reset을 해줘야 한다
               deleteMutation.reset();
               updateMutation.reset();
               setSelectedPost(post);
