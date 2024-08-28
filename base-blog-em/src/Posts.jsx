@@ -1,7 +1,7 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 
-import { fetchPosts } from "./api";
+import { deletePost, fetchPosts, updatePost } from "./api";
 import { PostDetail } from "./PostDetail";
 const maxPostPage = 10;
 const minPostPage = 1;
@@ -17,6 +17,19 @@ export function Posts() {
   });
 
   const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: deletePost,
+  });
+
+  if (deleteMutation.isSuccess) {
+    // variables:  mutateFn애 넘겨진 데이터, submittedAt, isPending ,isSuccess, data
+    console.log("[deleteMutation]:", deleteMutation);
+  }
+
+  const updateMutation = useMutation({
+    mutationFn: updatePost,
+  });
 
   useEffect(() => {
     queryClient.prefetchQuery({
@@ -36,7 +49,11 @@ export function Posts() {
           <li
             key={post.id}
             className="post-title"
-            onClick={() => setSelectedPost(post)}
+            onClick={() => {
+              deleteMutation.reset();
+              updateMutation.reset();
+              setSelectedPost(post);
+            }}
           >
             {post.title}
           </li>
@@ -58,7 +75,13 @@ export function Posts() {
         </button>
       </div>
       <hr />
-      {selectedPost && <PostDetail post={selectedPost} />}
+      {selectedPost && (
+        <PostDetail
+          post={selectedPost}
+          deleteMutation={deleteMutation}
+          updateMutation={updateMutation}
+        />
+      )}
     </>
   );
 }

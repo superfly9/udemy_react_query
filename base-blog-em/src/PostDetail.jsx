@@ -1,15 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { deletePost, fetchComments, updatePost } from "./api";
+import { useQuery } from "@tanstack/react-query";
+import { fetchComments } from "./api";
 import "./PostDetail.css";
 
-export function PostDetail({ post }) {
+export function PostDetail({ post, deleteMutation, updateMutation }) {
   const { data, isLoading } = useQuery({
     queryKey: ["detail", post.id],
     queryFn: () => fetchComments(post.id),
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deletePost,
   });
 
   if (deleteMutation.isSuccess) {
@@ -20,11 +16,10 @@ export function PostDetail({ post }) {
   const {
     data: mutateData,
     mutate,
+    isPending,
     isSuccess,
     submittedAt,
-  } = useMutation({
-    mutationFn: updatePost,
-  });
+  } = updateMutation;
 
   if (isSuccess) {
     console.log("[submittedAt]:", submittedAt);
@@ -43,6 +38,12 @@ export function PostDetail({ post }) {
     <>
       <h3 style={{ color: "blue" }}>{post.title}</h3>
       <button onClick={() => deleteMutation.mutate(post.id)}>Delete</button>
+      {deleteMutation.isPending && (
+        <p style={{ color: "red" }}>Delete Pending</p>
+      )}
+      {deleteMutation.isSuccess && (
+        <p style={{ color: "green" }}>Delete Success</p>
+      )}
       <button
         onClick={() =>
           mutate(post.id, {
@@ -54,6 +55,8 @@ export function PostDetail({ post }) {
       >
         Update title
       </button>
+      {isPending && <p style={{ color: "yellow" }}>Update Pending</p>}
+      {isSuccess && <p style={{ color: "navy" }}>Update Success</p>}
       <p>{post.body}</p>
       <h4>Comments</h4>
       {data.map((comment) => (
