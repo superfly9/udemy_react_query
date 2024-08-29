@@ -13,15 +13,18 @@ export function Posts() {
   // replace with useQuery
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["post", currentPage],
-    queryFn: () => fetchPosts(currentPage),
+    queryFn: () => fetchPosts(currentPage + 1),
+    staleTime: 2000,
   });
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    console.log("prefetching");
     queryClient.prefetchQuery({
-      queryKey: ["post", currentPage],
-      queryFn: () => fetchPosts(currentPage),
+      queryKey: ["post", currentPage + 1],
+      queryFn: () => fetchPosts(currentPage + 2),
+      staleTime: 5000,
     });
   }, [currentPage, queryClient]);
 
