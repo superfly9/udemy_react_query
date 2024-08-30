@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
-import { fetchPosts } from "./api";
+import { fetchComments, fetchPosts } from "./api";
 import { PostDetail } from "./PostDetail";
 const maxPostPage = 10;
 const minPostPage = 1;
@@ -20,13 +20,25 @@ export function Posts() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    console.log("prefetching");
     queryClient.prefetchQuery({
       queryKey: ["post", currentPage + 1],
       queryFn: () => fetchPosts(currentPage + 2),
       staleTime: 5000,
     });
   }, [currentPage, queryClient]);
+
+  useEffect(() => {
+    console.log("prefetching for Detail");
+    if (data) {
+      data.map((post) => {
+        queryClient.prefetchQuery({
+          queryKey: ["detail", post.id],
+          queryFn: () => fetchComments(post.id),
+          staleTime: 5000,
+        });
+      });
+    }
+  }, [data, queryClient]);
 
   if (isLoading) {
     return <>Loading...</>;
@@ -61,7 +73,17 @@ export function Posts() {
         </button>
       </div>
       <hr />
-      {selectedPost && <PostDetail post={selectedPost} />}
+      {selectedPost && (
+        <Suspense
+          fallback={
+            <div style={{ backgroundColor: "#fff", width: "100dvh" }}>
+              Use Suspense Query Loading...
+            </div>
+          }
+        >
+          <PostDetail post={selectedPost} />
+        </Suspense>
+      )}
     </>
   );
 }
