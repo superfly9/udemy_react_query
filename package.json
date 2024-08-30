@@ -8,7 +8,8 @@
   },
   "private": "true",
   "workspaces": [
-    "base-blog-em"
+    "base-blog-em",
+    "base-infinite-swapi"
   ],
   "dependencies": {
     "@tanstack/react-query": "^5.8.3",
