@@ -34,7 +34,7 @@ export function Posts() {
         queryClient.prefetchQuery({
           queryKey: ["detail", post.id],
           queryFn: () => fetchComments(post.id),
-          staleTime: 5000,
+          staleTime: 1000 * 60 * 60,
         });
       });
     }

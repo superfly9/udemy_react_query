@@ -6,6 +6,7 @@ export function PostDetail({ post }) {
   const { data } = useSuspenseQuery({
     queryKey: ["detail", post.id],
     queryFn: () => fetchComments(post.id),
+    staleTime: 1000 * 60 * 5,
   });
 
   const deleteMutation = useMutation({
