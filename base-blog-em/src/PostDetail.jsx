@@ -1,11 +1,12 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { deletePost, fetchComments, updatePost } from "./api";
 import "./PostDetail.css";
 
 export function PostDetail({ post }) {
-  const { data, isLoading } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ["detail", post.id],
     queryFn: () => fetchComments(post.id),
+    staleTime: 1000 * 60 * 5,
   });
 
   const deleteMutation = useMutation({
@@ -29,10 +30,6 @@ export function PostDetail({ post }) {
   if (isSuccess) {
     console.log("[submittedAt]:", submittedAt);
     console.log("mutation success", mutateData);
-  }
-
-  if (isLoading) {
-    return <>Loading...</>;
   }
 
   if (!data) {
